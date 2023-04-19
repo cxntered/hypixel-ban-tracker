@@ -1,0 +1,10 @@
+{
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/package-lock.json": true,
+		"**/package.json": true,
+	}
+}
