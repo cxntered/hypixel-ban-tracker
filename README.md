@@ -2,7 +2,7 @@
 
 # `Hypixel Ban Tracker`
 
-A simple discord bot that tracks bans on Hypixel.
+A simple Discord bot that tracks bans on Hypixel.
 
 </div>
 
