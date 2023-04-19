@@ -19,8 +19,8 @@ A simple Discord bot that tracks bans on Hypixel.
 # Install dependencies
 $ npm install
 
-# Rename config.js.example to config.js
-$ mv config.js.example config.js
+# Rename config.schema.js to config.js
+$ mv config.schema.js config.js
 
 # Edit config.js
 $ code config.js
