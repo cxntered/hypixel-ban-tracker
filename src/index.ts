@@ -45,9 +45,8 @@ const send = async (embed: EmbedBuilder) => {
 };
 
 // actual ban tracker
-let overallWatchdogBans = 0;
-let overallStaffBans = 0;
-let firstRun = true;
+let watchdogBans = 0;
+let staffBans = 0;
 
 setInterval(async () => {
 	const res = await fetch('https://api.plancke.io/hypixel/v1/punishmentStats', {
@@ -58,36 +57,36 @@ setInterval(async () => {
 		}
 	}).then((res) => res.json());
 
-	const watchdogBans = res.record.watchdog_total;
-	const staffBans = res.record.staff_total;
+	const newWatchdogBans = res.record.watchdog_total;
+	const newStaffBans = res.record.staff_total;
 
-	if (overallWatchdogBans !== undefined && overallStaffBans !== undefined) {
-		const watchdogBanDifference = watchdogBans - overallWatchdogBans;
-		const staffBanDifference = staffBans - overallStaffBans;
+	// if statement to check if its the first time running the function
+	if (watchdogBans !== 0 && staffBans !== 0) {
+		const watchdogBanDifference = newWatchdogBans - watchdogBans;
+		const staffBanDifference = newStaffBans - staffBans;
 
-		if (firstRun === true) {
-			firstRun = false;
-		} else {
-			if (watchdogBanDifference > 0) {
-				const embed = new EmbedBuilder()
-					.setAuthor({ name: `Watchdog banned ${watchdogBanDifference} ${pluralPlayer(watchdogBanDifference)}.` })
-					.setColor('#ffff00')
-					.setDescription(`${time(new Date(), 'R')}`);
-				send(embed);
-			}
+		// if there are new watchdog bans, send an embed to all subscribed channels
+		if (watchdogBanDifference > 0) {
+			const embed = new EmbedBuilder()
+				.setAuthor({ name: `Watchdog banned ${watchdogBanDifference} ${pluralPlayer(watchdogBanDifference)}.` })
+				.setColor('#ffff00')
+				.setDescription(`${time(new Date(), 'R')}`);
+			send(embed);
+		}
 
-			if (staffBanDifference > 0) {
-				const embed = new EmbedBuilder()
-					.setAuthor({ name: `Staff banned ${staffBanDifference} ${pluralPlayer(staffBanDifference)}.` })
-					.setColor('#ff0000')
-					.setDescription(`${time(new Date(), 'R')}`);
-				send(embed);
-			}
+		// if there are new staff bans, send an embed to all subscribed channels
+		if (staffBanDifference > 0) {
+			const embed = new EmbedBuilder()
+				.setAuthor({ name: `Staff banned ${staffBanDifference} ${pluralPlayer(staffBanDifference)}.` })
+				.setColor('#ff0000')
+				.setDescription(`${time(new Date(), 'R')}`);
+			send(embed);
 		}
 	}
 
-	overallWatchdogBans = watchdogBans;
-	overallStaffBans = staffBans;
+	// update the overall ban counts
+	watchdogBans = newWatchdogBans;
+	staffBans = newStaffBans;
 }, 100); // 100ms = 0.1s, you can change this to not get rate limited
 
 // login to discord
